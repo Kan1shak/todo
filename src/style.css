@@ -6,6 +6,33 @@
     user-select: none;
 }
 
+:root {
+    --bold-title: 32px;
+    --normal-title: 24px;
+    --small-title: 18px;
+    --para-text: 14px;
+}
+
+h2 {
+    font-size: var(--normal-title);
+}
+
+h4{
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: var(--small-title);
+}
+
+p {
+    font-size: var(--para-text);
+}
+.task-container > p {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: fit-content;
+}
+
 button {
     cursor: pointer;
     padding: 0.5rem 1rem;
@@ -38,10 +65,6 @@ button:hover {
 .heading {
     display: flex;
     justify-content: space-between;
-}
-
-.task-heading {
-    padding: 0 10%;
 }
 
 .main-content {
@@ -123,8 +146,77 @@ button:hover {
 }
 
 .form-selected {
-    transform: translate(-50%, -50%) scale(1);
+    transform: translate(-50%, -50%) scale(1) !important;
     z-index: 100;
+}
+
+.add-task-content {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    background-color: #ffffff;
+    padding: 2rem;
+    border-radius: 10px;
+    width: auto;
+    transition: all 0.2s ease-in-out;
+}
+
+.add-task-content form > button {
+    margin-top: 1rem;
+    background-color: #000000;
+    color: #ffffff;
+}
+
+.add-task-content form > button:hover {
+    background-color: #f1f1f1;
+    border: 1px solid #000000;
+    color: #000000;
+}
+
+.add-task-content form > button:focus {
+    outline: none;
+}
+
+.add-task-heading {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+}
+
+.add-task-heading button {
+    color: #520b0b;
+    background-color: #fbc7c7;
+    font-weight: 900;
+}
+
+.add-task-heading button:hover {
+    background-color: #ffcccc;
+    border: 1px solid #ffffff00;
+    box-shadow: 0px 0px 0px 2px #ff5757;
+}
+
+.add-task-content input,textarea {
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    border: 1px solid #3e3e3e;
+    resize: none;
+}
+
+.add-task-content input:hover,textarea:hover {
+    border: 1px solid #000000;
+    background-color: #f1f1f1;
+}
+
+.add-task-content input:focus,textarea:focus {
+    outline: none;
+    border: 1px solid #000000;
+}
+
+.add-task-content form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
 }
 
 .overlay {
@@ -142,4 +234,63 @@ button:hover {
 
 .overlay.active {
     display: block;
+}
+
+.task-item {
+    padding: 1rem 1.5rem;
+    background-color: #ffffff;
+    margin-bottom: 5px;
+    border-radius: 5px;
+    border: 1px solid #00000000;
+    transition: all 0.2s ease-in-out;
+    position: relative;
+    text-overflow: ellipsis;
+}
+
+.task-status {
+    position: absolute;
+    right: 1rem;
+    bottom: 1rem;
+    scale: 2.0;
+}
+
+.task-desc {
+    font-size: 14px;
+    color: #999;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    margin-right: 2rem;
+}
+
+.task-desc.expanded {
+    font-size: 16px;
+    color: #333;
+    overflow: visible;
+    display: -webkit-box;
+    -webkit-line-clamp: unset;
+    -webkit-box-orient: unset;
+  }
+
+.done {
+    text-decoration: line-through;
+    color: #999;
+}
+
+.task-item.done {
+    border-left: 7px solid #0026ff;
+}
+
+.low {
+    border-left: 7px solid #00ff00;
+}
+
+.medium {
+    border-left: 7px solid #ffcc00;
+}
+
+.high {
+    border-left: 7px solid #ff0000;
 }
