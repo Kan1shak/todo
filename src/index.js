@@ -40,7 +40,9 @@ const DisplayController = (() => {
     const taskContainer = document.querySelector('.task-container');
     const projectAddButton = document.getElementById('add-proj');
     const taskAddButton = document.getElementById('add-task');
-    var selectedProj = 0;
+    const projDialogue = document.querySelector('.add-proj-content');
+    const overlay = document.querySelector('#overlay');
+    let selectedProj = -1;
     const selectProj = (e) => {
         document.querySelectorAll('.proj-title').forEach(proj => {
             proj.classList.remove('selected');
@@ -48,6 +50,7 @@ const DisplayController = (() => {
         e.target.classList.add('selected');
         selectedProj = e.target.dataset.index;
         updateTasks(ProjectsList.getProjects()[selectedProj]);
+        
     }
     const updateProject = () => {
         projectContainer.textContent = '';
@@ -76,14 +79,48 @@ const DisplayController = (() => {
             taskContainer.appendChild(taskDesc);
         }); 
     }
+    const openProjDialogue = () => {
+        projDialogue.classList.add('form-selected');
+        overlay.classList.add('active');
+    }
+    const closeProjDialogue = () => {
+        const projTitle = document.querySelector('#proj-name');
+        projDialogue.classList.remove('form-selected');
+        overlay.classList.remove('active');
+        projTitle.value = '';
+    }
     const buttonHandler = (() => {
         projectAddButton.addEventListener('click', () =>{
-            ProjectsList.addProject(new Project("Some title!"));
-            updateProject();
+            openProjDialogue();
         });
         taskAddButton.addEventListener('click', () => {
-            ProjectsList.getProjects()[selectedProj].addTask(new Task('damn', 'kinda high', 'nice desc.'));
-            updateTasks(ProjectsList.getProjects()[selectedProj]);
+            if (selectedProj != -1){
+                ProjectsList.getProjects()[selectedProj].addTask(new Task('damn', 'kinda high', 'nice desc.'));
+                updateTasks(ProjectsList.getProjects()[selectedProj]);
+            }
+        });
+
+
+        //event listner for proj form
+        const projForm = document.getElementById('proj-form');
+        projForm.addEventListener('submit', (e)=>{
+            //Preventing page refresh
+            e.preventDefault();
+            const projTitle = document.querySelector('#proj-name').value;
+            ProjectsList.addProject(new Project(projTitle));
+            updateProject();
+            closeProjDialogue();
+            const lastProject = document.querySelector(`[data-index=\"${selectedProj}\"]`);
+            lastProject.classList.add('selected');
+        })
+        //event listner for closing proj form
+        const closeProjButton = document.getElementById('close-proj');
+        closeProjButton.addEventListener('click', () => closeProjDialogue());
+        //event listner for closing proj when click outside form
+        document.body.addEventListener('click', (e)=>{
+            if(e.target.classList.contains('overlay')){
+                closeProjDialogue();
+            }
         });
     })();
     updateProject();
