@@ -1,5 +1,5 @@
 import './style.css'
-
+import {deplyToast} from './toast.js';
 function ProjectHolder(){
     const projects = [];
     const getProjects = () => projects;
@@ -97,6 +97,9 @@ const DisplayController = (() => {
             if (selectedProj != -1){
                 ProjectsList.getProjects()[selectedProj].addTask(new Task('damn', 'kinda high', 'nice desc.'));
                 updateTasks(ProjectsList.getProjects()[selectedProj]);
+            }
+            else {
+                deplyToast('You need to make a project first!','error');
             }
         });
 
