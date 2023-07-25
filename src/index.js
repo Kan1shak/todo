@@ -20,6 +20,19 @@ function ProjectHolder(){
         });
         return {General,"High Priority":HighPriority,Completed};
     }
+    const findTask = (taskName) => {
+        let foundTask = null;
+        let foundProject = null;
+        getProjects().forEach(project => {
+            project.getTasks().forEach(task => {
+                if (task.title === taskName){
+                    foundTask = task;
+                    foundProject = project;
+                }
+            });
+        });
+        return [foundTask, foundProject];
+    }
     const getProjects = () => projects;
     const addProject = (project) => {
         projects.push(project);
@@ -28,7 +41,7 @@ function ProjectHolder(){
         const index = projects.indexOf(project);
         projects.splice(index,1);
     }
-    return {getProjects, addProject, removeProject,getFolders}
+    return {getProjects, addProject, removeProject,getFolders, findTask}
 };
 function Project(name, category='General'){
     this.name = name;
@@ -63,17 +76,39 @@ const DisplayController = (() => {
     const taskDialogue = document.querySelector('.add-task-content');
     const overlay = document.querySelector('#overlay');
     let selectedProj = -1;
+    let selectedTask = null;
+    let selectedFolder = null;
+    let selectedItemType = 'project';
     const selectProj = (e) => {
         document.querySelectorAll('.selected').forEach(proj => {
             proj.classList.remove('selected');
         });
-        e.target.classList.add('selected');
-        selectedProj = e.target.dataset.index;
+        if (ProjectsList.getProjects()[0] != undefined){
+            e.target.classList.add('selected');
+        }
         if (e.target.classList.contains('folder-title')){
-            updateTasks(ProjectsList.getFolders()[e.target.textContent],'folder');
+            selectedItemType = 'folder';
+            selectedFolder = e.target.textContent;
+            updateTasks(ProjectsList.getFolders()[selectedFolder]);
         }
         else {
-            updateTasks(ProjectsList.getProjects()[selectedProj],'project');
+            selectedItemType = 'project';
+            selectedProj = e.target.dataset.index;
+            updateTasks(ProjectsList.getProjects()[selectedProj]);
+        }
+        // if (selectedProj != -1 && selectedProj != undefined){
+        //     projTitle.addEventListener('click', selectProj);
+        // }
+    }
+    const deleteTask = (e) => {
+        let task,project;
+        [task,project] = ProjectsList.findTask(e.target.parentElement.parentElement.firstChild.textContent);
+        project.removeTask(task);
+        if (selectedItemType === 'project'){
+            updateTasks(getCurrentProj());
+        }
+        else {
+            updateTasks(getCurrentProj());
         }
     }
     const updateProject = () => {
@@ -87,22 +122,23 @@ const DisplayController = (() => {
             projTitle.dataset.index = index;
             projectContainer.appendChild(projTitle);
             selectedProj = index;
-            updateTasks(ProjectsList.getProjects()[selectedProj],'project');
+            updateTasks(ProjectsList.getProjects()[selectedProj]);
         });
     }
-    const updateTasks = (project,where) => {
+    const updateTasks = (project) => {
+        const where = selectedItemType;
         taskContainer.textContent = '';
-            let currentTasks;
-            if (where === 'folder'){
-                currentTasks = project;
-                if (currentTasks[0] === undefined) {
-                    deplyToast('No tasks in this folder!','info');
-                }
+        let currentTasks;
+        if (where === 'folder'){
+            currentTasks = project;
+            if (currentTasks[0] === undefined) {
+                deplyToast('No tasks in this folder!','info');
             }
-            if (where === 'project'){
-                currentTasks = project.getTasks();
-            }
-            currentTasks.forEach(task => {
+        }
+        if (where === 'project'){
+            currentTasks = project.getTasks();
+        }
+        currentTasks.forEach(task => {
             //creating task item
             const taskItem = document.createElement('div');
             taskItem.classList.add('task-item');
@@ -113,12 +149,32 @@ const DisplayController = (() => {
             taskTitle.textContent = task.title;
             //creating task description
             const taskDesc = document.createElement('p');
-            taskDesc.textContent =  task.description;
+            taskDesc.textContent =  task.description  === '' ? "No description provided." : task.description;
             taskDesc.classList.add('task-desc');
             taskItem.addEventListener('click', (e) => {
                 if (!e.target.classList.contains('task-status')){
                     taskDesc.classList.toggle('expanded');
+                    taskButtons.classList.toggle('unhidden');
                 }
+            });
+            //div for task buttons
+            const taskButtons = document.createElement('div');
+            taskButtons.classList.add('task-buttons');
+            //creating task edit button
+            const taskEditButton = document.createElement('button');
+            taskEditButton.classList.add('task-edit');
+            taskEditButton.textContent = 'Edit';
+            taskEditButton.addEventListener('click', (e) => {
+                e.stopPropagation();
+                openTaskDialogue(ProjectsList.findTask(taskTitle.textContent)[0]);
+            });
+            //create task delete button
+            const taskDeleteButton = document.createElement('button');
+            taskDeleteButton.classList.add('task-delete');
+            taskDeleteButton.textContent = 'Delete';
+            taskDeleteButton.addEventListener('click', (e)=> {
+                e.stopPropagation();
+                deleteTask(e);
             });
             //creating task status checkbox
             const taskStatus = document.createElement('input');
@@ -138,6 +194,7 @@ const DisplayController = (() => {
                 taskTitle.classList.toggle('done');
                 taskDesc.classList.toggle('done');
                 taskItem.classList.toggle('done');
+                updateTasks(getCurrentProj());
             });
             const checkStatus = () => {
                 if (task.status){
@@ -153,19 +210,18 @@ const DisplayController = (() => {
                     taskItem.classList.remove('done');
                 }
             }
-            //creating task priority
-            // const taskPriority = document.createElement('span');
-            // taskPriority.classList.add('task-priority');
-            // taskPriority.textContent = task.priority;
+            //setting task priority
             taskItem.classList.add(task.priority.toLowerCase());
             //adding all to task item
             checkStatus();
             taskItem.appendChild(taskTitle);
             taskItem.appendChild(taskDesc);
             taskItem.appendChild(taskStatus);
+            taskButtons.appendChild(taskEditButton);
+            taskButtons.appendChild(taskDeleteButton);
+            taskItem.appendChild(taskButtons);
             taskContainer.append(taskItem);
         })
-        updateFolders();
     }
     const openProjDialogue = () => {
         projDialogue.classList.add('form-selected');
@@ -173,11 +229,25 @@ const DisplayController = (() => {
     }
     const closeProjDialogue = () => {
         const projTitle = document.querySelector('#proj-name');
+        const projCategory = document.querySelector('#proj-category');
         projDialogue.classList.remove('form-selected');
         overlay.classList.remove('active');
         projTitle.value = '';
+        projCategory.value = '';
     }
-    const openTaskDialogue = () => {
+    const openTaskDialogue = (task) => {
+        if (task){
+            const taskTitle = document.querySelector('#task-name');
+            const taskPriority = document.querySelector('#task-priority');
+            const taskDesc = document.querySelector('#task-description');
+            const addTaskButton = document.querySelector('#add-task-btn');
+
+            taskTitle.value = task.title;
+            taskPriority.value = task.priority;
+            taskDesc.value = task.description;
+            addTaskButton.textContent = 'Edit Task';
+            selectedTask = task;
+        }
         taskDialogue.classList.add('form-selected');
         overlay.classList.add('active');
     }
@@ -190,10 +260,21 @@ const DisplayController = (() => {
         taskTitle.value = '';
         taskPriority.value = 'Medium';
         taskDesc.value = '';
+        selectedTask = null;
+    }
+    const getCurrentProj = () => {
+        let proj;
+        if (selectedItemType === 'project'){
+            proj = ProjectsList.getProjects()[selectedProj];
+        } if (selectedItemType === 'folder') {
+            proj = ProjectsList.getFolders()[selectedFolder];
+        }
+        return proj;
     }
     const buttonHandler = (() => {
         projectAddButton.addEventListener('click', () =>{
             openProjDialogue();
+            selectedItemType = 'project';
         });
         //event listner for proj form
         const projForm = document.getElementById('proj-form');
@@ -208,6 +289,7 @@ const DisplayController = (() => {
             const lastProject = document.querySelector(`[data-index=\"${selectedProj}\"]`);
             lastProject.classList.add('selected');
             deplyToast('Project added!','success');
+            selectProj({target:lastProject});
         })
         //event listner for closing proj form
         const closeProjButton = document.getElementById('close-proj');
@@ -222,7 +304,12 @@ const DisplayController = (() => {
 
         taskAddButton.addEventListener('click', () => {
             if (selectedProj != -1 && selectedProj != undefined){
-                openTaskDialogue();
+                if (selectedItemType === 'project'){
+                    openTaskDialogue();
+                }
+                else {
+                    deplyToast('You can only add tasks in a project!','error');
+                }
             }
             else {
                 deplyToast('You need to make a project first!','error');
@@ -235,10 +322,21 @@ const DisplayController = (() => {
             const taskTitle = document.querySelector('#task-name').value;
             const taskPriority = document.querySelector('#task-priority').value;
             const taskDesc = document.querySelector('#task-description').value;
-            ProjectsList.getProjects()[selectedProj].addTask(new Task(taskTitle, taskPriority, taskDesc === '' ? "No description provided." : taskDesc));
-            updateTasks(ProjectsList.getProjects()[selectedProj],'project');
-            closeTaskDialogue();
-            deplyToast('Task added!','success');    
+            if (selectedTask){
+                selectedTask.title = taskTitle;
+                selectedTask.priority = taskPriority;
+                selectedTask.description = taskDesc;
+                updateTasks(getCurrentProj());
+                closeTaskDialogue();
+                deplyToast('Task edited!','success');
+                selectedTask = null;
+            }
+            else {
+                ProjectsList.getProjects()[selectedProj].addTask(new Task(taskTitle, taskPriority, taskDesc));
+                updateTasks(ProjectsList.getProjects()[selectedProj]);
+                closeTaskDialogue();
+                deplyToast('Task added!','success');  
+            }
         })
         //event listner for closing task form
         const closeTaskButton = document.getElementById('close-task');

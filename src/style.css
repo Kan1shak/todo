@@ -70,6 +70,7 @@ button:hover {
 
 .main-content {
     padding: 30px;
+    overflow: auto;
 }
 
 .proj-title,.folder-title {
@@ -260,9 +261,21 @@ button:hover {
 
 .task-status {
     position: absolute;
-    right: 1rem;
-    bottom: 1rem;
-    scale: 2.0;
+    right: 1.5rem;
+    bottom: 1.5rem;
+    scale: 3.0;
+}
+
+.task-item.high .task-status {
+    accent-color: #ff0000;
+}
+
+.task-item.medium .task-status {
+    accent-color: #ffcc00;
+}
+
+.task-item.low .task-status {
+    accent-color: #00ff00;
 }
 
 .task-desc {
@@ -308,4 +321,19 @@ button:hover {
 
 .proj-heading {
     margin-top: 2rem;
+}
+
+.task-buttons {
+    margin-top: 1rem;
+    display:none;
+}
+
+.task-buttons button {
+    margin-left: 0.5rem;
+    border: 1px solid #a3a3a3;
+}
+
+.task-buttons.unhidden {
+    display: flex;
+    justify-content: flex-start;
 }
