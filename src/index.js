@@ -34,8 +34,8 @@ function ProjectHolder(){
         return [foundTask, foundProject];
     }
     const getProjects = () => projects;
-    const addProject = (project) => {
-        projects.push(project);
+    const addProject = (name,category='General') => {
+        projects.push(new Project(name,category));
     }
     const removeProject = (project) => {
         const index = projects.indexOf(project);
@@ -43,12 +43,12 @@ function ProjectHolder(){
     }
     return {getProjects, addProject, removeProject,getFolders, findTask}
 };
-function Project(name, category='General'){
+function Project(name, category){
     this.name = name;
     this.category = category;
     this.tasks = [];
-    this.addTask = (task) => {
-        this.tasks.push(task);
+    this.addTask = (title,priority,description,status=false) => {
+        this.tasks.push(new Task(title,priority,description,status));
     }
     this.removeTask = (task) => {
         const index = this.tasks.indexOf(task);
@@ -59,7 +59,7 @@ function Project(name, category='General'){
     }
 }
 
-function Task(title,priority,description,status=false){
+function Task(title,priority,description,status){
     this.title = title;
     this.priority = priority;
     this.description = description;
@@ -283,7 +283,7 @@ const DisplayController = (() => {
             e.preventDefault();
             const projTitle = document.querySelector('#proj-name').value;
             const projCategory = document.querySelector('#proj-category').value;
-            ProjectsList.addProject(new Project(projTitle, projCategory === '' ? 'General' : projCategory));
+            ProjectsList.addProject(projTitle, projCategory === '' ? 'General' : projCategory);
             updateProject();
             closeProjDialogue();
             const lastProject = document.querySelector(`[data-index=\"${selectedProj}\"]`);
@@ -332,7 +332,7 @@ const DisplayController = (() => {
                 selectedTask = null;
             }
             else {
-                ProjectsList.getProjects()[selectedProj].addTask(new Task(taskTitle, taskPriority, taskDesc));
+                ProjectsList.getProjects()[selectedProj].addTask(taskTitle, taskPriority, taskDesc);
                 updateTasks(ProjectsList.getProjects()[selectedProj]);
                 closeTaskDialogue();
                 deplyToast('Task added!','success');  
