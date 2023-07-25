@@ -1,9 +1,14 @@
+// A factory function that creates a ProjectHolder object to manage projects and tasks
 function ProjectHolder(){
     const projects = [];
+
+    // Function to get tasks categorized into "General", "High Priority", and "Completed"
     const getFolders = () => {
         const General = [];
         const HighPriority = [];
         const Completed = [];
+
+        // Loop through all projects and their tasks to categorize them
         getProjects().forEach(project => {
             project.getTasks().forEach(task => {
                 if (task.priority === 'High' && !task.status){
@@ -16,11 +21,17 @@ function ProjectHolder(){
                 }
             });
         });
-        return {General,"High Priority":HighPriority,Completed};
+
+        // Return an object containing categorized tasks
+        return { General, "High Priority": HighPriority, Completed };
     }
+
+    // Function to find a task by its title and return both the task and its parent project
     const findTask = (taskName) => {
         let foundTask = null;
         let foundProject = null;
+
+        // Loop through all projects and their tasks to find the matching task
         getProjects().forEach(project => {
             project.getTasks().forEach(task => {
                 if (task.title === taskName){
@@ -29,37 +40,59 @@ function ProjectHolder(){
                 }
             });
         });
+
+        // Return an array containing the found task and its parent project
         return [foundTask, foundProject];
     }
+
+    // Function to get the list of projects
     const getProjects = () => projects;
-    const addProject = (name,category='General') => {
-        projects.push(new Project(name,category));
+
+    // Function to add a new project to the projects list
+    const addProject = (name, category = 'General') => {
+        projects.push(new Project(name, category));
     }
+
+    // Function to remove a project from the projects list
     const removeProject = (project) => {
         const index = projects.indexOf(project);
-        projects.splice(index,1);
+        projects.splice(index, 1);
     }
-    return {getProjects, addProject, removeProject,getFolders, findTask}
+
+    // Return an object with the available functions and data
+    return { getProjects, addProject, removeProject, getFolders, findTask };
 };
+
+// Constructor function to create Project objects
 function Project(name, category){
     this.name = name;
     this.category = category;
     this.tasks = [];
-    this.addTask = (title,priority,description,status=false) => {
-        this.tasks.push(new Task(title,priority,description,status));
+
+    // Function to add a task to the project
+    this.addTask = (title, priority, description, status = false) => {
+        this.tasks.push(new Task(title, priority, description, status));
     }
+
+    // Function to remove a task from the project
     this.removeTask = (task) => {
         const index = this.tasks.indexOf(task);
-        this.tasks.splice(index,1);
+        this.tasks.splice(index, 1);
     }
+
+    // Function to get the list of tasks in the project
     this.getTasks = () => {
         return this.tasks;
     }
 }
-function Task(title,priority,description,status){
+
+// Constructor function to create Task objects
+function Task(title, priority, description, status){
     this.title = title;
     this.priority = priority;
     this.description = description;
     this.status = status;
 }
+
+// Export the ProjectHolder, Project, and Task functions to be used in other modules
 export { ProjectHolder, Project, Task };
