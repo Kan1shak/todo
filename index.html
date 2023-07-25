@@ -9,6 +9,14 @@
 <body>
     <div class="container">
         <div class="sidebar">
+            <div class="folders">
+                <div class="folder-heading heading">
+                    <h2>Folders</h2>
+                </div>
+                <div class="folder-container">
+                    
+                </div>
+            </div>
             <div class="projects">
                 <div class="proj-heading heading">
                     <h2>Projects</h2>
@@ -36,6 +44,7 @@
             <div class="add-proj-form">
                 <form action="" method="post" id="proj-form">
                     <input type="text" name="proj-name" id="proj-name" placeholder="Project Name" required>
+                    <input type="text" name="proj-category" id="proj-category" placeholder="Project Category">
                     <button id="add-proj-btn">Add Project</button>
                 </form>
             </div>
@@ -52,7 +61,7 @@
                     <textarea name="task-description" id="task-description" form="task-form" maxlength="500" cols="25" rows="3" placeholder="Task Description"></textarea>
                     <select name="task-priority" id="task-priority" required>
                         <option value="High">High</option>
-                        <option value="Medium">Medium</option>
+                        <option value="Medium" selected>Medium</option>
                         <option value="Low">Low</option>
                     </select>
                     <button id="add-task-btn">Add Task</button>
