@@ -2,12 +2,15 @@
 import './style.css';
 import { updateProject, updateFolders, fireEventListeners } from './displayController.js';
 import { ProjectHolder } from './dataHolder.js';
-
+import { retrieveProjects } from './storage.js';
 // Creating a ProjectsList object using the ProjectHolder factory function
 const ProjectsList = ProjectHolder();
 
 // Calling the function to set up event listeners for buttons and forms
 fireEventListeners();
+
+// Calling the function to retrieve projects from local storage
+retrieveProjects();
 
 // Calling the functions to update the display of projects and folders upon page load
 updateProject();

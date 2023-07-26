@@ -59,8 +59,12 @@ function ProjectHolder(){
         projects.splice(index, 1);
     }
 
+    const addProjectLocalStorage = (project) => {
+        projects.push(project);
+    }
+
     // Return an object with the available functions and data
-    return { getProjects, addProject, removeProject, getFolders, findTask };
+    return { getProjects, addProject, removeProject, getFolders, findTask, addProjectLocalStorage };
 };
 
 // Constructor function to create Project objects
@@ -83,6 +87,10 @@ function Project(name, category){
     // Function to get the list of tasks in the project
     this.getTasks = () => {
         return this.tasks;
+    }
+    
+    this.addTaskLocalStorage = (task) => {
+        this.tasks.push(task);
     }
 }
 

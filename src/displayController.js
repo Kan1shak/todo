@@ -1,6 +1,7 @@
 // Import the required functions from other modules
 import { deployToast } from './toast.js';
-import {ProjectsList} from './index.js';
+import { ProjectsList } from './index.js';
+import { storeProjects } from './storage.js';
 
 // DOM elements
 const projectContainer = document.querySelector('.project-container');
@@ -169,6 +170,7 @@ const updateTasks = (project) => {
         taskItem.appendChild(taskButtons);
         taskContainer.append(taskItem);
     })
+    storeProjects();
 }
 
 // Function to open the project dialogue
