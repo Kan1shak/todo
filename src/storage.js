@@ -12,7 +12,7 @@ function retrieveProjects(){
             const newProject = new Project(project.name, project.category);
             //add tasks to this project
             project.tasks.forEach(task => {
-                const newTask = new Task(task.title, task.priority, task.description, task.status, task.dueDate);
+                const newTask = new Task(task.title, task.priority, task.description, task.status, task.dueDate, task.createdDate);
                 newProject.addTaskLocalStorage(newTask);
             });
             ProjectsList.addProjectLocalStorage(newProject);

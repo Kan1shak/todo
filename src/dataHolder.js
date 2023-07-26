@@ -103,13 +103,17 @@ function Project(name, category){
 }
 
 // Constructor function to create Task objects
-function Task(title, priority, description, status,date){
+function Task(title, priority, description, status,dueDate, createdDate){
     this.title = title;
     this.priority = priority;
     this.description = description;
     this.status = status;
-    this.dueDate = date;
-    this.createdDate = format(new Date(), 'yyyy-MM-dd');
+    this.dueDate = dueDate;
+    if (createdDate){
+        this.createdDate = createdDate;
+    } else {
+        this.createdDate = format(new Date(), 'yyyy-MM-dd');
+    }
 }
 
 // Export the ProjectHolder, Project, and Task functions to be used in other modules
