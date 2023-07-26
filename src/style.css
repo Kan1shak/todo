@@ -259,10 +259,29 @@ button:hover {
     text-overflow: ellipsis;
 }
 
+.task-desc, .task-title-due-date {
+    margin-left: 2rem;
+}
+
+.task-title-due-date {
+    display: flex;
+    justify-content: space-between;
+}
+
+.task-due-date {
+    color: #999;
+}
+
+.task-creation-date {
+    color: #999;
+    align-self: center;
+    justify-self: flex-end;
+}
+
 .task-status {
     position: absolute;
-    right: 1.5rem;
-    bottom: 1.5rem;
+    left: 1.5rem;
+    top: 2rem;
     scale: 3.0;
 }
 
@@ -286,7 +305,7 @@ button:hover {
     display: -webkit-box;
     -webkit-line-clamp: 1;
     -webkit-box-orient: vertical;
-    margin-right: 2rem;
+    margin-right: 10%;
 }
 
 .task-desc.expanded {
@@ -295,7 +314,7 @@ button:hover {
     display: -webkit-box;
     -webkit-line-clamp: unset;
     -webkit-box-orient: unset;
-  }
+}
 
 .done {
     text-decoration: line-through;
@@ -303,19 +322,19 @@ button:hover {
 }
 
 .task-item.done {
-    border-left: 7px solid #0026ff;
+    border-right: 7px solid #0026ff;
 }
 
 .low {
-    border-left: 7px solid #00ff00;
+    border-right: 7px solid #00ff00;
 }
 
 .medium {
-    border-left: 7px solid #ffcc00;
+    border-right: 7px solid #ffcc00;
 }
 
 .high {
-    border-left: 7px solid #ff0000;
+    border-right: 7px solid #ff0000;
 }
 
 .proj-heading {
@@ -328,11 +347,12 @@ button:hover {
 }
 
 .task-buttons button {
-    margin-left: 0.5rem;
+    margin-right: 0.5rem;
     border: 1px solid #a3a3a3;
 }
 
 .task-buttons.unhidden {
-    display: flex;
-    justify-content: flex-start;
+    margin-left: 2rem;
+    display:grid;
+    grid-template-columns: repeat(2, minmax(50px, 100px)) 1fr;
 }

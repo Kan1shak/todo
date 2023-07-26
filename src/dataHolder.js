@@ -1,3 +1,4 @@
+import { format } from "date-fns";
 // A factory function that creates a ProjectHolder object to manage projects and tasks
 function ProjectHolder(){
     const projects = [];
@@ -30,19 +31,26 @@ function ProjectHolder(){
     const findTask = (taskName) => {
         let foundTask = null;
         let foundProject = null;
-
+        // 0 means not found, 1 means found, 2 means found more than once
+        let count = 0;
+        let multiple = false;
         // Loop through all projects and their tasks to find the matching task
         getProjects().forEach(project => {
             project.getTasks().forEach(task => {
                 if (task.title === taskName){
                     foundTask = task;
                     foundProject = project;
+                    count++;
                 }
             });
         });
 
-        // Return an array containing the found task and its parent project
-        return [foundTask, foundProject];
+        // a boolean value indicating if multiple tasks were found
+        if (count >= 2) {
+            multiple =  true;
+        }
+        // Return an array containing the found task and its parent project, and the boolean value
+        return [foundTask, foundProject,multiple];
     }
 
     // Function to get the list of projects
@@ -74,8 +82,8 @@ function Project(name, category){
     this.tasks = [];
 
     // Function to add a task to the project
-    this.addTask = (title, priority, description, status = false) => {
-        this.tasks.push(new Task(title, priority, description, status));
+    this.addTask = (title, priority, description, status = false, dueDate='') => {
+        this.tasks.push(new Task(title, priority, description, status,dueDate));
     }
 
     // Function to remove a task from the project
@@ -95,11 +103,13 @@ function Project(name, category){
 }
 
 // Constructor function to create Task objects
-function Task(title, priority, description, status){
+function Task(title, priority, description, status,date){
     this.title = title;
     this.priority = priority;
     this.description = description;
     this.status = status;
+    this.dueDate = date;
+    this.createdDate = format(new Date(), 'yyyy-MM-dd');
 }
 
 // Export the ProjectHolder, Project, and Task functions to be used in other modules

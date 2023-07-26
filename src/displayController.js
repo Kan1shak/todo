@@ -48,7 +48,8 @@ const selectProj = (e) => {
 // Event handler to delete a task
 const deleteTask = (e) => {
     let task,project;
-    [task,project] = ProjectsList.findTask(e.target.parentElement.parentElement.firstChild.textContent);
+    [task,project] = ProjectsList.findTask(e.target.parentElement.parentElement.firstChild.firstChild.textContent);
+    console.log(task);
     project.removeTask(task);
     //  Update the tasks display for the current project or folder
     updateTasks(getCurrentProj());
@@ -91,10 +92,20 @@ const updateTasks = (project) => {
         const taskItem = document.createElement('div');
         taskItem.classList.add('task-item');
         taskItem.dataset.index = currentTasks.indexOf(task);
+        // creating div that holds task title and due date
+        const taskTitleDueDate = document.createElement('div');
+        taskTitleDueDate.classList.add('task-title-due-date');
         // creating task title
         const taskTitle = document.createElement('h4');
         taskTitle.classList.add('task-title');
         taskTitle.textContent = task.title;
+        // creating task due date
+        const taskDueDate = document.createElement('p');
+        taskDueDate.classList.add('task-due-date');
+        taskDueDate.textContent = task.dueDate === '' ? "No due date provided." : `Due date: ${task.dueDate}`;
+        // adding title and due date to task item
+        taskTitleDueDate.appendChild(taskTitle);
+        taskTitleDueDate.appendChild(taskDueDate);
         // creating task description
         const taskDesc = document.createElement('p');
         taskDesc.textContent =  task.description  === '' ? "No description provided." : task.description;
@@ -105,6 +116,10 @@ const updateTasks = (project) => {
                 taskButtons.classList.toggle('unhidden');
             }
         });
+        // add creation date after the description
+        const taskCreationDate = document.createElement('p');
+        taskCreationDate.classList.add('task-creation-date');
+        taskCreationDate.textContent = `Created on: ${task.createdDate}`; 
         // div for task buttons
         const taskButtons = document.createElement('div');
         taskButtons.classList.add('task-buttons');
@@ -162,11 +177,12 @@ const updateTasks = (project) => {
         taskItem.classList.add(task.priority.toLowerCase());
         // adding all to task item
         checkStatus();
-        taskItem.appendChild(taskTitle);
+        taskItem.appendChild(taskTitleDueDate);
         taskItem.appendChild(taskDesc);
         taskItem.appendChild(taskStatus);
         taskButtons.appendChild(taskEditButton);
         taskButtons.appendChild(taskDeleteButton);
+        taskButtons.appendChild(taskCreationDate)
         taskItem.appendChild(taskButtons);
         taskContainer.append(taskItem);
     })
@@ -191,18 +207,21 @@ const closeProjDialogue = () => {
 
 // Function to open the task dialogue
 const openTaskDialogue = (task) => {
+    const addTaskButton = document.querySelector('#add-task-btn');
     if (task){
         const taskTitle = document.querySelector('#task-name');
         const taskPriority = document.querySelector('#task-priority');
         const taskDesc = document.querySelector('#task-description');
-        const addTaskButton = document.querySelector('#add-task-btn');
-
+        const taskDueDate = document.querySelector('#task-date');
         taskTitle.value = task.title;
         taskPriority.value = task.priority;
         taskDesc.value = task.description;
         addTaskButton.textContent = 'Edit Task';
+        taskDueDate.value = task.dueDate;
         selectedTask = task;
-    }
+    } else {
+        addTaskButton.textContent = 'Add Task';
+    }   
     taskDialogue.classList.add('form-selected');
     overlay.classList.add('active');
 }
@@ -212,11 +231,13 @@ const closeTaskDialogue = () => {
     const taskTitle = document.querySelector('#task-name');
     const taskPriority = document.querySelector('#task-priority');
     const taskDesc = document.querySelector('#task-description');
+    const taskDueDate = document.querySelector('#task-date');
     taskDialogue.classList.remove('form-selected');
     overlay.classList.remove('active');
     taskTitle.value = '';
     taskPriority.value = 'Medium';
     taskDesc.value = '';
+    taskDueDate.value = '';
     selectedTask = null;
 }
 
@@ -299,17 +320,34 @@ const fireEventListeners = () => {
         const taskTitle = document.querySelector('#task-name').value;
         const taskPriority = document.querySelector('#task-priority').value;
         const taskDesc = document.querySelector('#task-description').value;
+        const taskDueDate = document.querySelector('#task-date').value;
+        // check if task with same title already exists
+        if (ProjectsList.findTask(taskTitle)[0] && !selectedTask){
+            deployToast('Task with same title already exists!','error');
+            return;
+        }
+        console.log(ProjectsList.findTask(taskTitle)[2]);
+
         if (selectedTask){
+            // check if task with the new title already exists, if it does, revert the changes
+            // ProjectsList.findTask(taskTitle)[2] is true if there are more than 1 tasks with the same title
+            const oldTitle = selectedTask.title;
             selectedTask.title = taskTitle;
+            if (ProjectsList.findTask(taskTitle)[2]){
+                deployToast('Task with same title already exists!','error');
+                selectedTask.title = oldTitle;
+                return;
+            }
             selectedTask.priority = taskPriority;
             selectedTask.description = taskDesc;
+            selectedTask.dueDate = taskDueDate;
             updateTasks(getCurrentProj());
             closeTaskDialogue();
             deployToast('Task edited!','success');
             selectedTask = null;
         }
         else {
-            ProjectsList.getProjects()[selectedProj].addTask(taskTitle, taskPriority, taskDesc);
+            ProjectsList.getProjects()[selectedProj].addTask(taskTitle, taskPriority, taskDesc, false, taskDueDate);
             updateTasks(ProjectsList.getProjects()[selectedProj]);
             closeTaskDialogue();
             deployToast('Task added!','success');  
