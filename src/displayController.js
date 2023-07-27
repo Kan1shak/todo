@@ -2,6 +2,7 @@
 import { deployToast } from './toast.js';
 import { ProjectsList } from './index.js';
 import { storeProjects } from './storage.js';
+import { de } from 'date-fns/locale';
 
 // DOM elements
 const projectContainer = document.querySelector('.project-container');
@@ -29,13 +30,14 @@ const selectProj = (e) => {
     });
     //  Check if there are any projects
     if (ProjectsList.getProjects()[0] != undefined){
-        e.target.classList.add('selected');
+        e.target.parentElement.classList.add('selected');
     }
     
     //  Check if the selected element is a folder or a project and update the tasks for the selected item type
     if (e.target.classList.contains('folder-title')){
         selectedItemType = 'folder';
         selectedFolder = e.target.textContent;
+        e.target.classList.add('selected');
         updateTasks(ProjectsList.getFolders()[selectedFolder]);
     }
     else {
@@ -59,16 +61,48 @@ const updateProject = () => {
     projectContainer.textContent = '';
     const currentProjects = ProjectsList.getProjects();
     currentProjects.forEach((project,index) => {
+        // creating project item
+        const projItem = document.createElement('div');
+        projItem.classList.add('proj-item');
+        projItem.addEventListener('click', (e) => {
+            if (e.target.classList.contains('proj-title')){
+                selectProj(e)
+            }
+            else {
+                selectProj({target:e.target.firstChild})
+            }
+
+        });
+        // creating project title
         const projTitle = document.createElement('h4');
         projTitle.classList.add('proj-title');
         projTitle.textContent = project.name;
-        projTitle.addEventListener('click', selectProj);
         projTitle.dataset.index = index;
-        projectContainer.appendChild(projTitle);
+        // create project delete button
+        const projDeleteButton = document.createElement('button');
+        projDeleteButton.classList.add('proj-delete');
+        projDeleteButton.textContent = 'Delete';
+        projDeleteButton.addEventListener('click', (e)=> {
+            e.stopPropagation();
+            ProjectsList.removeProject(project);
+            storeProjects();
+            updateProject();
+            if (ProjectsList.getProjects().length === 0){
+                taskContainer.textContent = '';
+            }
+            selectProj({target: document.querySelector(`[data-index="${selectedProj}"]`)});
+            deployToast('Project deleted!','success');
+        });
+        // adding all to project item
+        projItem.appendChild(projTitle);
+        projItem.appendChild(projDeleteButton);
+        // adding project item to project container
+        projectContainer.appendChild(projItem);
         // Set the selected project index and update tasks for the first project by default
         selectedProj = index;
         updateTasks(ProjectsList.getProjects()[selectedProj]);
     });
+    selectProj({target: document.querySelector(`[data-index="${selectedProj}"]`)});
 }
 
 // Function to update the tasks display for a project or folder
@@ -137,6 +171,7 @@ const updateTasks = (project) => {
         taskDeleteButton.addEventListener('click', (e)=> {
             e.stopPropagation();
             deleteTask(e);
+            deployToast('Task deleted!','success');
         });
         // creating task status checkbox
         const taskStatus = document.createElement('input');

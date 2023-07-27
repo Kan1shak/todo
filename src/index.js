@@ -20,7 +20,6 @@ updateFolders();
 
 // if the website is opened for the first time, select the default project
 if (getIsOpenFirstTime()){
-    console.log(getIsOpenFirstTime())
     selectProj({target: document.querySelector('[data-index="1"]')})
     setIsOpenFirstTime(false);
 }

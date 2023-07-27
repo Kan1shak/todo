@@ -73,7 +73,7 @@ button:hover {
     overflow: auto;
 }
 
-.proj-title,.folder-title {
+.proj-item,.folder-title {
     font-weight: 600;
     padding: 1rem 1.5rem;
     background-color: #ffffff;
@@ -83,13 +83,34 @@ button:hover {
     transition: all 0.2s ease-in-out;
 }
 
-.proj-title:hover, .folder-title:hover {
+.proj-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.proj-item .proj-delete {
+    margin-left: 0.5rem;
+    display: none;
+}
+
+.proj-item:hover, .folder-title:hover {
     background-color: #f1f1f1;
     border: 1px solid #000000;
 }
 
-.proj-title.selected, .folder-title.selected {
-    background-color: #cac8c8;
+.proj-item.selected, .folder-title.selected {
+    border: 1px solid #000000;
+}
+
+.proj-item.selected .proj-delete {
+    border-color: #000000;
+    display: block;
+}
+
+.proj-item.selected .proj-delete:hover {
+    background-color: #000000;
+    color: #ffffff;
 }
 
 [class *= "-container"] {
