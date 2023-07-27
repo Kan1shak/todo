@@ -7,6 +7,18 @@
     
   }
   
+*::selection {
+    background-color: hsl(258, 100%, 85%);
+}
+
+input::-webkit-datetime-edit-day-field:focus,
+input::-webkit-datetime-edit-month-field:focus,
+input::-webkit-datetime-edit-year-field:focus {
+    background-color: var(--accent);
+    color: white;
+    outline: none;
+}
+
   :root {
     --bold-title: 32px;
     --normal-title: 24px;
@@ -185,6 +197,12 @@
     margin-left: 1rem;
   }
   
+.add-proj-content form > button:hover {
+    background-color: var(--secondary);
+    border: 1px solid var(--text-color);
+    color: var(--text-color);
+}
+
   .add-proj-heading button {
     color: var(--accent);
     background-color: var(--secondary);
@@ -332,30 +350,29 @@
     justify-self: flex-end;
   }
   
-  .task-status {
+  /* .task-status-label {
     position: absolute;
     left: 1.5rem;
     top: 2rem;
-    scale: 3.0;
-  }
+  } */
   
   .task-edit,
   .task-delete {
     padding: 0.35rem 0.5rem;
   }
   
-  .task-item.high .task-status {
-    accent-color: var(--high-priority);
-  }
-  
-  .task-item.medium .task-status {
-    accent-color: var(--medium-priority);
-  }
-  
-  .task-item.low .task-status {
-    accent-color: var(--low-priority);
-  }
-  
+    /* .task-item.high .task-status {
+        accent-color: var(--high-priority);
+    }
+    
+    .task-item.medium .task-status {
+        accent-color: var(--medium-priority);
+    }
+    
+    .task-item.low .task-status {
+        accent-color: var(--low-priority);
+    }
+    */
   .task-desc {
     font-size: 14px;
     color: var(--secondary-text-color);
@@ -453,3 +470,49 @@
 *::-webkit-scrollbar-thumb:hover {
     background-color: var(--accent);
 }
+
+label.task-status-label {
+    padding-left: 2rem;
+    padding-bottom: 14px;
+    padding-top: 1rem;
+    position: absolute;
+    top: 2.5rem;
+    left: 1rem;
+    transform: translateY(-50%);
+    
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  }
+  label.task-status-label input[type=checkbox] {
+    position: absolute;
+    opacity: 0;
+  }
+  label.task-status-label input[type=checkbox]:focus ~ span {
+    border: 2px solid var(--background);
+  }
+  label.task-status-label input[type=checkbox]:focus:checked ~ span {
+    border: 2px solid var(--accent);
+  }
+  label.task-status-label input[type=checkbox]:checked ~ span {
+    color: var(--background);
+    background: var(--accent) url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9Im5vIj8+DQo8c3ZnIHdpZHRoPSIxMiIgaGVpZ2h0PSI5IiB2aWV3Qm94PSIwIDAgMTIgOSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4NCiAgPHBhdGggZD0iTTQuNTc1IDguOTc3cy0uNDA0LS4wMDctLjUzNi0uMTY1TC4wNTcgNS42NGwuODI5LTEuMjI3TDQuNDcgNy4yNjggMTAuOTIxLjA4NmwuOTIzIDEuMTAzLTYuODYzIDcuNjRjLS4xMzQtLjAwMy0uNDA2LjE0OC0uNDA2LjE0OHoiIGZpbGw9IiNGRkYiIGZpbGwtcnVsZT0iZXZlbm9kZCIvPg0KPC9zdmc+) 50% 40% no-repeat;
+    background-size: 1.5rem 1.5rem;
+    border: 2px solid var(--accent);
+  }
+  label.task-status-label span {
+    border-radius: 3px;
+    position: absolute;
+    left: 0;
+    top: -2px;
+    width: 2rem;
+    height: 2rem;
+    background-color: var(--background);
+    border: 2px solid var(--background);
+    pointer-events: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  }

@@ -187,6 +187,14 @@ const updateTasks = (project) => {
         const taskStatus = document.createElement('input');
         taskStatus.type = 'checkbox';
         taskStatus.classList.add('task-status');
+        //creating label for task status checkbox
+        const taskStatusLabel = document.createElement('label');
+        taskStatusLabel.classList.add('task-status-label');
+        //creating span for custom checkbox
+        const taskStatusSpan = document.createElement('span');
+        taskStatusSpan.classList.add('checkbox-custom');
+        taskStatusLabel.appendChild(taskStatus);
+        taskStatusLabel.appendChild(taskStatusSpan);
         if (task.status){
             taskStatus.checked = true;
             taskStatus.classList.add('done');
@@ -223,7 +231,7 @@ const updateTasks = (project) => {
         checkStatus();
         taskItem.appendChild(taskTitleDueDate);
         taskItem.appendChild(taskDesc);
-        taskItem.appendChild(taskStatus);
+        taskItem.appendChild(taskStatusLabel);
         taskButtons.appendChild(taskEditButton);
         taskButtons.appendChild(taskDeleteButton);
         taskButtons.appendChild(taskCreationDate)
