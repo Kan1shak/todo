@@ -49,7 +49,6 @@ const selectProj = (e) => {
 const deleteTask = (e) => {
     let task,project;
     [task,project] = ProjectsList.findTask(e.target.parentElement.parentElement.firstChild.firstChild.textContent);
-    console.log(task);
     project.removeTask(task);
     //  Update the tasks display for the current project or folder
     updateTasks(getCurrentProj());
@@ -326,7 +325,6 @@ const fireEventListeners = () => {
             deployToast('Task with same title already exists!','error');
             return;
         }
-        console.log(ProjectsList.findTask(taskTitle)[2]);
 
         if (selectedTask){
             // check if task with the new title already exists, if it does, revert the changes

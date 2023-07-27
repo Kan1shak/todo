@@ -1,4 +1,5 @@
-import { format } from "date-fns";
+import { format, isToday, isFuture, isBefore } from "date-fns";
+import { is } from "date-fns/locale";
 // A factory function that creates a ProjectHolder object to manage projects and tasks
 function ProjectHolder(){
     const projects = [];
@@ -8,10 +9,14 @@ function ProjectHolder(){
         const General = [];
         const HighPriority = [];
         const Completed = [];
+        const Today = [];
+        const Upcoming = [];
+        const Overdue = [];
 
         // Loop through all projects and their tasks to categorize them
         getProjects().forEach(project => {
             project.getTasks().forEach(task => {
+                const dueDate = new Date(task.dueDate);
                 if (task.priority === 'High' && !task.status){
                     HighPriority.push(task);
                 }
@@ -20,11 +25,24 @@ function ProjectHolder(){
                 } else {
                     General.push(task);
                 }
+                if (dueDate === 'Invalid Date'){
+                }
+                else {
+                    if (isToday(dueDate) && !task.status){
+                        Today.push(task);
+                    }
+                    if (isFuture(dueDate) && !task.status){
+                        Upcoming.push(task);
+                    }
+                    if (isBefore(dueDate, new Date(format(new Date(), 'yyyy-MM-dd'))) && !task.status){
+                        Overdue.push(task);
+                    }    
+                }
             });
         });
 
         // Return an object containing categorized tasks
-        return { General, "High Priority": HighPriority, Completed };
+        return { General, "High Priority": HighPriority, Completed, Today, Upcoming, Overdue };
     }
 
     // Function to find a task by its title and return both the task and its parent project
