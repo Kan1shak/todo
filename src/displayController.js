@@ -56,6 +56,13 @@ const deleteTask = (e) => {
     updateTasks(getCurrentProj());
 }
 
+const createIcon = (name) => {
+    const icon = document.createElement('span');
+    icon.classList.add('material-symbols-outlined');
+    icon.textContent = name;
+    return icon;
+}
+
 // Function to update the projects list display
 const updateProject = () => {
     projectContainer.textContent = '';
@@ -81,7 +88,8 @@ const updateProject = () => {
         // create project delete button
         const projDeleteButton = document.createElement('button');
         projDeleteButton.classList.add('proj-delete');
-        projDeleteButton.textContent = 'Delete';
+        projDeleteButton.appendChild(createIcon('delete'));
+        projDeleteButton.title = 'Delete Project';
         projDeleteButton.addEventListener('click', (e)=> {
             e.stopPropagation();
             ProjectsList.removeProject(project);
@@ -135,7 +143,7 @@ const updateTasks = (project) => {
         // creating task due date
         const taskDueDate = document.createElement('p');
         taskDueDate.classList.add('task-due-date');
-        taskDueDate.textContent = task.dueDate === '' ? "No due date provided." : `Due date: ${task.dueDate}`;
+        taskDueDate.textContent = task.dueDate === '' ? "No due date provided." : `Due: ${task.dueDate}`;
         // adding title and due date to task item
         taskTitleDueDate.appendChild(taskTitle);
         taskTitleDueDate.appendChild(taskDueDate);
@@ -159,7 +167,8 @@ const updateTasks = (project) => {
         // creating task edit button
         const taskEditButton = document.createElement('button');
         taskEditButton.classList.add('task-edit');
-        taskEditButton.textContent = 'Edit';
+        taskEditButton.appendChild(createIcon('edit'));
+        taskEditButton.title = 'Edit Task';
         taskEditButton.addEventListener('click', (e) => {
             e.stopPropagation();
             openTaskDialogue(ProjectsList.findTask(taskTitle.textContent)[0]);
@@ -167,7 +176,8 @@ const updateTasks = (project) => {
         // create task delete button
         const taskDeleteButton = document.createElement('button');
         taskDeleteButton.classList.add('task-delete');
-        taskDeleteButton.textContent = 'Delete';
+        taskDeleteButton.appendChild(createIcon('delete'));
+        taskDeleteButton.title = 'Delete Task';
         taskDeleteButton.addEventListener('click', (e)=> {
             e.stopPropagation();
             deleteTask(e);
