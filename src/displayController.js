@@ -356,4 +356,4 @@ const fireEventListeners = () => {
     closeTaskButton.addEventListener('click', () => closeTaskDialogue());
 }
 // Export the necessary functions to be used in the index.js
-export {  updateProject, updateFolders, fireEventListeners };
+export {  updateProject, updateFolders, fireEventListeners, selectProj };
