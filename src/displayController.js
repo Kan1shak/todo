@@ -22,6 +22,23 @@ let selectedTask = null;
 let selectedFolder = null;
 let selectedItemType = 'project';
 
+// Media query to change the display on basis of screen size
+const mediaQuery = window.matchMedia('(max-width: 768px)');
+function handleTabletChange(e) {
+  // Check if the media query is true
+  if (e.matches) {
+    // Then log the following message to the console
+    if (!document.querySelector('.side-bar-button')){
+        const sideBarbutton = document.createElement('button');
+        sideBarbutton.classList.add('side-bar-button');
+        sideBarbutton.appendChild(createIcon('menu'));
+        document.querySelector('.container').appendChild(sideBarbutton);
+        sideBarbutton.addEventListener('click', () => {
+            document.querySelector('.container').classList.toggle('sidebar-active');
+        });
+    }
+  }
+}
 // Event handler to select a project or folder
 const selectProj = (e) => {
     // de-selecting the previously selected project
@@ -90,6 +107,9 @@ const updateProject = () => {
             }
             else {
                 selectProj({target:e.target.firstChild})
+            }
+            if (mediaQuery.matches){
+                document.querySelector('.container').classList.toggle('sidebar-active');
             }
 
         });
@@ -367,7 +387,12 @@ const updateFolders = () => {
         }
         folderTitle.appendChild(folderIcon);
         folderTitle.appendChild(folderTitleSpan);
-        folderTitle.addEventListener('click', selectProj);
+        folderTitle.addEventListener('click', (e) => {
+            selectProj(e);
+            if (mediaQuery.matches){
+                document.querySelector('.container').classList.toggle('sidebar-active');
+            }
+        });
         folderItem.appendChild(folderTitle);
         folderContainer.appendChild(folderItem);
     }
@@ -460,6 +485,11 @@ const fireEventListeners = () => {
     // event listner for closing task form
     const closeTaskButton = document.getElementById('close-task');
     closeTaskButton.addEventListener('click', () => closeTaskDialogue());
+    // media query event listener
+    // Register event listener
+    mediaQuery.addListener(handleTabletChange);
+    // Initial check
+    handleTabletChange(mediaQuery);
 }
 // Export the necessary functions to be used in the index.js
 export {  updateProject, updateFolders, fireEventListeners, selectProj };

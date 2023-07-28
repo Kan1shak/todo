@@ -230,6 +230,10 @@ input::-webkit-datetime-edit-year-field:focus {
     justify-content: center;
   }
   
+  #add-proj-btn {
+    margin: 0;
+  }  
+
   #add-proj span,
   #add-task span {
     font-size: 2rem;
@@ -637,4 +641,143 @@ footer a:hover {
     margin-left: 0.15rem;
     padding-bottom: 0.3rem;
     margin-top: 0.2rem;
+}
+
+@media screen and (max-width: 768px) {
+    .container {
+        grid-template-columns: 1fr;
+        height: 88svh;
+    }
+    .sidebar {
+        display: none;
+    }
+    .main-content {
+        overflow: auto;
+        padding: 25px 15px;
+    }
+
+    .sidebar {
+        overflow: auto;
+        padding: 25px 15px;
+    }
+
+    h4 {
+        white-space: pre-wrap;
+    }
+    .task-item {
+        padding: 1rem 0.5rem 1rem 1rem;
+        background-color: #dbd6ff;
+        margin-bottom: 5px;
+        border-radius: 5px;
+        transition: all 0.2s ease-in-out;
+        position: relative;
+        overflow: hidden;
+    }
+    .task-item:hover {
+        background-color: #ccb6ff;
+        box-shadow: 0.5px 0.5px 8px #bda8ec25, -0.5px -0.5px 8px #DBC4FF25;
+        border-color: var(--primary);
+    }
+    .task-item.expanded {
+        background-color: #ccb6ff;
+        box-shadow: 0px 0px 0px #BDA8EC, 0px 0px 0px #DBC4FF;
+        border-top-color: #00000000;
+        border-bottom-color: #00000000;
+        border-left-color: #00000000;
+    }
+
+    .task-title {
+        font-size: 1rem;
+    }
+    .task-desc,
+    .task-title-due-date {
+        margin-left: 2rem;
+    }
+    .task-title-due-date {
+        display: flex;
+        justify-content: space-between;
+    }
+    .task-due-date {
+        color: var(--secondary-text-color);
+        max-width: 30%;
+    }
+    .task-buttons {
+        grid-template-columns: repeat(2, minmax(25px, 50px));
+    }
+    .task-edit,
+    .task-delete {
+        padding: 2vw;
+    }
+    .task-desc {
+        font-size: 14px;
+        color: var(--secondary-text-color);
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 1;
+        -webkit-box-orient: vertical;
+        margin-right: 10%;
+    }
+    .task-desc.expanded {
+        color: var(--text-color);
+        overflow: visible;
+        display: -webkit-box;
+        -webkit-line-clamp: unset;
+        -webkit-box-orient: unset;
+    }
+      label.task-status-label span {
+        width: 1.5rem;
+        height: 1.5rem;
+      }
+      label.task-status-label input[type=checkbox]:checked ~ span {
+        background-size: 1rem 1rem;
+      }
+      .side-bar-button {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0.5rem 1rem;
+        border-radius: 50px;
+        border: 1px solid #00000000;
+        background-color: var(--primary);
+        color: var(--background);
+        transition: all 0.2s ease-in-out;
+        position: fixed;
+        bottom: 2rem;
+        right: 2rem;
+      }
+      .side-bar-button:hover {
+        color: var(--text-color);
+      }
+      .container.sidebar-active .sidebar {
+        display: block;
+      }
+      .container.sidebar-active .main-content {
+        display: none;
+      }
+      .navbar {
+        padding: 0.5rem 5svw;
+        height: 8svh;
+      }
+      .footer {
+        height: 4svh;
+      }
+      .add-task-content {
+        padding: 1rem;
+        max-width: 90svw;
+      }
+      .add-proj-content {
+        padding: 1rem;
+        width: 90svw;
+      }
+      .add-proj-content .add-proj-form {
+        width: 100%;
+      }
+
+      .add-proj-content .add-proj-form input {
+        width: 100%;
+      }
+      .folder-container, .proj-heading, .proj-container {
+        margin-top: 0.75rem;
+      }
 }
