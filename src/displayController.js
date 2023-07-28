@@ -80,8 +80,13 @@ const selectProj = (e) => {
 // Event handler to delete a task
 const deleteTask = (e) => {
     let task,project;
-    [task,project] = ProjectsList.findTask(e.target.parentElement.parentElement.firstChild.firstChild.textContent);
-    project.removeTask(task);
+    if (e.target.classList.contains('task-delete')){
+        [task,project] = ProjectsList.findTask(e.target.parentElement.parentElement.firstChild.firstChild.textContent);
+    }
+    else {
+        [task,project] = ProjectsList.findTask(e.target.parentElement.parentElement.parentElement.firstChild.firstChild.textContent);
+    }
+        project.removeTask(task);
     //  Update the tasks display for the current project or folder
     updateTasks(getCurrentProj());
 }
