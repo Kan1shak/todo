@@ -75,7 +75,7 @@ function ProjectHolder(){
     const getProjects = () => projects;
 
     // Function to add a new project to the projects list
-    const addProject = (name, category = 'General') => {
+    const addProject = (name, category = '') => {
         projects.push(new Project(name, category));
     }
 

@@ -12,6 +12,8 @@ const taskAddButton = document.getElementById('add-task');
 const projDialogue = document.querySelector('.add-proj-content');
 const taskDialogue = document.querySelector('.add-task-content');
 const overlay = document.querySelector('#overlay');
+const taskHeading = document.querySelector('.task-heading h2');
+const taskHeadingDesc = document.querySelector('.proj-description');
 
 // Variables to keep track of selected project, task, folder, and item type (project or folder)
 let selectedProj = -1;
@@ -124,9 +126,17 @@ const updateTasks = (project) => {
         if (currentTasks[0] === undefined) {
             deployToast('No tasks in this folder!','info');
         }
+        // Set the task heading to the folder name
+        taskHeading.textContent = selectedFolder;
+        // Set the task category to task heading description
+        taskHeadingDesc.textContent = 'Folder';
     }
     if (where === 'project'){
         currentTasks = project.getTasks();
+        // Set the task heading to the project name
+        taskHeading.textContent = project.name;
+        // Set the task category to task heading description
+        taskHeadingDesc.textContent = project.category;
     }
     currentTasks.forEach(task => {
         // creating task item

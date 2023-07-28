@@ -1,7 +1,7 @@
 const defaultProjects = [
     {
         "name": "Default",
-        "category": "General",
+        "category": "",
         "tasks": [
             {
                 "title": "This is an example task!",
@@ -15,7 +15,7 @@ const defaultProjects = [
     },
     {
         "name": "This is a project!",
-        "category": "General",
+        "category": "",
         "tasks": [
             {
                 "title": "This is a task in that project!",
@@ -45,7 +45,7 @@ const defaultProjects = [
     },
     {
         "name": "Try adding a new project!",
-        "category": "General",
+        "category": "",
         "tasks": [
             {
                 "title": "Click me! and uhhh, try the edit button!",
@@ -75,7 +75,7 @@ const defaultProjects = [
     },
     {
         "name": "Try clicking the folders too!",
-        "category": "General",
+        "category": "",
         "tasks": [
             {
                 "title": "About General",
