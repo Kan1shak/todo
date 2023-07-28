@@ -36,9 +36,19 @@ const selectProj = (e) => {
     }
     
     //  Check if the selected element is a folder or a project and update the tasks for the selected item type
-    if (e.target.classList.contains('folder-title')){
+    if (e.target.classList.contains('folder-title') || e.target.classList.contains('folder-title-span') || e.target.classList.contains('material-symbols-outlined')){
         selectedItemType = 'folder';
-        selectedFolder = e.target.textContent;
+        if (e.target.classList.contains('folder-title-span')){
+            selectedFolder = e.target.textContent;        
+        }
+        else {
+            if (e.target.classList.contains('folder-title')){
+                selectedFolder = e.target.querySelector('.folder-title-span').textContent;
+            } else {
+                selectedFolder = e.target.parentElement.querySelector('.folder-title-span').textContent;
+            }
+        }
+        
         e.target.classList.add('selected');
         updateTasks(ProjectsList.getFolders()[selectedFolder]);
     }
@@ -324,7 +334,35 @@ const updateFolders = () => {
         folderItem.classList.add('folder-item');
         const folderTitle = document.createElement('h4');
         folderTitle.classList.add('folder-title');
-        folderTitle.textContent = folder;
+        //create folder title span 
+        const folderTitleSpan = document.createElement('span');
+        folderTitleSpan.classList.add('folder-title-span');
+        folderTitleSpan.textContent = folder;
+        //create icon for folder
+        const folderIcon = document.createElement('span');
+        folderIcon.classList.add('material-symbols-outlined');
+        switch(folder){
+            case 'General':
+                folderIcon.textContent = 'format_list_bulleted';
+                break;
+            case 'High Priority':
+                folderIcon.textContent = 'priority_high';
+                break;
+            case 'Completed':
+                folderIcon.textContent = 'task_alt';
+                break;
+            case 'Today':
+                folderIcon.textContent = 'today';
+                break;
+            case 'Upcoming':
+                folderIcon.textContent = 'event_upcoming';
+                break;
+            case 'Overdue':
+                folderIcon.textContent = 'event_busy';
+                break;
+        }
+        folderTitle.appendChild(folderIcon);
+        folderTitle.appendChild(folderTitleSpan);
         folderTitle.addEventListener('click', selectProj);
         folderItem.appendChild(folderTitle);
         folderContainer.appendChild(folderItem);
