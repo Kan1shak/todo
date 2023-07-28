@@ -154,6 +154,7 @@ const updateTasks = (project) => {
         taskItem.addEventListener('click', (e) => {
             if (!e.target.classList.contains('task-status')){
                 taskDesc.classList.toggle('expanded');
+                taskItem.classList.toggle('expanded');
                 taskButtons.classList.toggle('unhidden');
             }
         });

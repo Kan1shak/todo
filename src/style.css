@@ -100,48 +100,78 @@ input::-webkit-datetime-edit-year-field:focus {
   .proj-item,
   .folder-title {
     font-weight: 600;
-    padding: 1rem 1.5rem;
-    background-color: var(--background);
-    margin-bottom: 5px;
-    border-radius: 5px;
+    position: relative;
+    padding: 0.75rem 1.5rem;
+    background-color: var(--secondary);
+    margin-bottom: 7px;
+    border-radius: 7px;
     border: 1px solid #00000000;
-    transition: all 0.2s ease-in-out;
-  }
-  
+    box-shadow: 7.81px 7.81px 18px #cabcea00, -7.81px -7.81px 18px #e4d4ff00, inset 7.81px 7.81px 18px #cabcea00, inset -7.81px -7.81px 18px #e4d4ff00;
+    transition: all 0.3s ease-in-out;
+    border: 1px solid hsl(258, 80%, 85%);
+}
+
+@keyframes onclick {
+    0% {
+        box-shadow: 9.91px 9.91px 20px #BCAFDA, -9.91px -9.91px 20px #F2E1FF, inset 9.91px 9.91px 20px #cabcea00, inset -9.91px -9.91px 20px #E4D4FF00;
+        background-color: rgb(204, 182, 255);
+    }
+    20% {
+        box-shadow: 9.91px 9.91px 20px #cabcea00, -9.91px -9.91px 20px #e4d4ff00,inset 9.91px 9.91px 20px #ff11c71b, inset -9.91px -9.91px 20px #0debff1b;
+        background-color: rgb(204, 182, 255);
+    }
+    60% {
+        box-shadow: 9.91px 9.91px 20px #cabcea00, -9.91px -9.91px 20px #e4d4ff00,inset 9.91px 9.91px 20px #ff11c700, inset -9.91px -9.91px 20px #0debff00;
+        background-color: rgb(204, 182, 255);
+    }
+    100% {
+        box-shadow: 9.91px 9.91px 20px #BCAFDA, -9.91px -9.91px 20px #F2E1FF, inset 9.91px 9.91px 20px #cabcea00, inset -9.91px -9.91px 20px #E4D4FF00;
+        background-color: rgb(204, 182, 255);
+    }
+}
+
   .proj-item {
     display: flex;
     justify-content: space-between;
     align-items: center;
   }
   
-  .proj-item .proj-delete {
-    margin-left: 0.5rem;
-    display: none;
-    padding: 0.35rem 0.5rem;
-  }
-  
   .proj-item:hover,
   .folder-title:hover {
-    background-color: var(--secondary);
-    border: 1px solid var(--primary);
-  }
+    background-color: rgb(204, 182, 255);
+    box-shadow: 7.81px 7.81px 18px #BCAFDA, -7.81px -7.81px 18px #F2E1FF,inset 7.81px 7.81px 18px #cabcea00, inset -7.81px -7.81px 18px #E4D4FF00;
+}
+
+.proj-item:active, .folder-title:active  {
+    animation: onclick 0.4s ease-in-out;
+}
   
   .proj-item.selected,
   .folder-title.selected {
     border: 1px solid var(--primary);
   }
   
+  .proj-item .proj-delete {
+    margin-left: 0.5rem;
+    display: none;
+    padding: 0.35rem 0.5rem;
+    background-color: var(--secondary);
+    transition: all 0.3s ease-in-out;
+    box-shadow: 6.31px 6.31px 15px #C7B9E6, -6.31px -6.31px 15px #E7D7FF;}
+
+  .proj-item:hover .proj-delete {
+    background-color: #ccb6ff;
+  }
+
+  .proj-delete:active {
+    box-shadow: 0px 0px 0px #C7B9E6, 0px 0px 0px #E7D7FF;
+  }
+
   .proj-item.selected .proj-delete {
-    border-color: var(--background);
     display: flex;
     align-items: center;
     justify-content: center;
-  }
-  
-  .proj-item.selected .proj-delete:hover {
-    background-color: var(--accent);
-    color: var(--background);
-    border: 1px solid var(--primary);
+    
   }
   
   [class*="-container"] {
@@ -330,6 +360,20 @@ input::-webkit-datetime-edit-year-field:focus {
     text-overflow: ellipsis;
   }
   
+  .task-item:hover {
+    background-color: #ccb6ff;
+    box-shadow: 0.5px 0.5px 8px #bda8ec25, -0.5px -0.5px 8px #DBC4FF25;
+    border-color: var(--primary);
+  }
+
+  .task-item.expanded {
+    background-color: #ccb6ff;
+    box-shadow: 0px 0px 0px #BDA8EC, 0px 0px 0px #DBC4FF;
+    border-top-color: #00000000;
+    border-bottom-color: #00000000;
+    border-left-color: #00000000;
+  }
+
   .task-desc,
   .task-title-due-date {
     margin-left: 2rem;
@@ -350,29 +394,11 @@ input::-webkit-datetime-edit-year-field:focus {
     justify-self: flex-end;
   }
   
-  /* .task-status-label {
-    position: absolute;
-    left: 1.5rem;
-    top: 2rem;
-  } */
-  
   .task-edit,
   .task-delete {
     padding: 0.35rem 0.5rem;
   }
   
-    /* .task-item.high .task-status {
-        accent-color: var(--high-priority);
-    }
-    
-    .task-item.medium .task-status {
-        accent-color: var(--medium-priority);
-    }
-    
-    .task-item.low .task-status {
-        accent-color: var(--low-priority);
-    }
-    */
   .task-desc {
     font-size: 14px;
     color: var(--secondary-text-color);
@@ -448,6 +474,10 @@ input::-webkit-datetime-edit-year-field:focus {
     grid-template-columns: repeat(2, minmax(25px, 50px)) 1fr;
   }
   
+.task-buttons span {
+    color: var(--background);
+}
+
   .proj-title,
   .task-title {
     font-weight: 600;
