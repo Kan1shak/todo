@@ -14,7 +14,8 @@ const taskDialogue = document.querySelector('.add-task-content');
 const overlay = document.querySelector('#overlay');
 const taskHeading = document.querySelector('.task-heading h2');
 const taskHeadingDesc = document.querySelector('.proj-description');
-
+const totalTasksDOM = document.querySelector('.total-tasks');
+const completedTasksDOM = document.querySelector('.completed-tasks');
 // Variables to keep track of selected project, task, folder, and item type (project or folder)
 let selectedProj = -1;
 let selectedTask = null;
@@ -260,6 +261,9 @@ const updateTasks = (project) => {
         taskContainer.append(taskItem);
     })
     storeProjects();
+    // Update the total and completed tasks display
+    totalTasksDOM.textContent = `Total tasks: ${ProjectsList.getTotalTasks()}`;
+    completedTasksDOM.textContent = `Completed: ${ProjectsList.getFolders()[Object.keys(ProjectsList.getFolders())[2]].length}`;
 }
 
 // Function to open the project dialogue

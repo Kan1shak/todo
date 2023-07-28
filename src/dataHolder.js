@@ -44,7 +44,16 @@ function ProjectHolder(){
         // Return an object containing categorized tasks
         return { General, "High Priority": HighPriority, Completed, Today, Upcoming, Overdue };
     }
-
+    // function to get total number of tasks
+    const getTotalTasks = () => {
+        let totalTasks = 0;
+        getProjects().forEach(project => {
+            project.getTasks().forEach(task => {
+                totalTasks++;
+            });
+        });
+        return totalTasks;
+    }
     // Function to find a task by its title and return both the task and its parent project
     const findTask = (taskName) => {
         let foundTask = null;
@@ -90,7 +99,7 @@ function ProjectHolder(){
     }
 
     // Return an object with the available functions and data
-    return { getProjects, addProject, removeProject, getFolders, findTask, addProjectLocalStorage };
+    return { getProjects, addProject, removeProject, getFolders, findTask, addProjectLocalStorage, getTotalTasks };
 };
 
 // Constructor function to create Project objects
